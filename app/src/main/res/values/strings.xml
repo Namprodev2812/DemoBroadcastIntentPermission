@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">DemoBroadcastIntentPermission</string>
-    <string name="wifi_is_on_off">Wifi is on/off</string>
-    <string name="send_broadcast">Send Broadcast</string>
+    <string name="send_intent_Ex">StartExplitcit</string>
+    <string name="send_intent_im_view">StartView</string>
+    <string name="send_intent_im_mail">StartMail</string>
+    <string name="cat_name">Miu</string>
+    <string name="cat_ho">EnglishCat</string>
 </resources>

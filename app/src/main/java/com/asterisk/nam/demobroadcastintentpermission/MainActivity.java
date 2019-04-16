@@ -3,6 +3,7 @@ package com.asterisk.nam.demobroadcastintentpermission;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -14,101 +15,77 @@ import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String MYMESSENGER = "hellonam";
-    public final static String WIFI_ON = "Wifi is on";
-    public final static String WIFI_OFF = "Wifi is off";
-    public final static String BODY_MYMESSENGER = "Today, i feel so happy";
-    public final static String KEY_MYMESSENGER = "Today, i feel so happy";
-    private Switch mSwitchWifi;
-    private WifiManager mWifiManager;
-    private WifiBroadcastReceiver mBroadcastReceiver;
-    private Button mButtonSend;
-    private MessengerBroadcastReceiver mMessengerBroadcastReceiver;
+
+    private final static Integer AGE_CAT = 3;
+    public final static String KEY_INTENT_NORMAL = "my_string";
+    private final static String DATA_INTENT_NORMAL = "Today, The Weather is very cold";
+    public final static String KEY_INTENT_BUNDLE = "my_string_bundle";
+    private final static String DATA_INTENT_BUNDLE = "Today, my laptop is repaired";
+    public final static String KEY_INTENT_BUNDLE_PACERABLE = "my_string_bundle_pacerable";
+    private Button mButtonSendIntentEx,mButtonSendIntentView,mButtonSendIntentMail;
+    private Cat mCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        setChangeSwitch();
         clickButton();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        initBroadcastReceiverLocal();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        stopBroadcastListenerLocal();
-    }
-
     public void init() {
-        mSwitchWifi = findViewById(R.id.switch_open_off_wifi);
-        mWifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        mButtonSend = findViewById(R.id.button_sendbroadcast);
-    }
-
-    public void setChangeSwitch() {
-
-        mSwitchWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mWifiManager.setWifiEnabled(true);
-                    mSwitchWifi.setText(WIFI_ON);
-                } else {
-                    mWifiManager.setWifiEnabled(false);
-                    mSwitchWifi.setText(WIFI_OFF);
-                }
-            }
-        });
-
-        if (mWifiManager.isWifiEnabled()) {
-            mSwitchWifi.setChecked(true);
-            mSwitchWifi.setText(WIFI_ON);
-        } else {
-            mSwitchWifi.setChecked(false);
-            mSwitchWifi.setText(WIFI_OFF);
-        }
-    }
-
-    public void initBroadcastReceiverLocal(){
-        mBroadcastReceiver =  new WifiBroadcastReceiver(mSwitchWifi);
-        mMessengerBroadcastReceiver =  new MessengerBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        intentFilter.addAction(MYMESSENGER);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessengerBroadcastReceiver,intentFilter);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,intentFilter);
-    }
-    public void stopBroadcastListenerLocal(){
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessengerBroadcastReceiver);
-    }
-    public void sendBroadcastLocal(){
-        Intent intent = new Intent();
-        intent.setAction(MYMESSENGER);
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_MYMESSENGER,BODY_MYMESSENGER);
-        intent.putExtras(bundle);
-        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+        mButtonSendIntentEx = findViewById(R.id.button_sendintentex);
+        mButtonSendIntentView = findViewById(R.id.button_sendintentview);
+        mButtonSendIntentMail = findViewById(R.id.button_sendintentmail);
     }
 
     public void clickButton() {
-        mButtonSend.setOnClickListener(new View.OnClickListener() {
+        mButtonSendIntentEx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBroadcastLocal();
+                mCat = new Cat(getString(R.string.cat_name),3,getString(R.string.cat_ho));
+                startIntentExplicit();
             }
         });
+        mButtonSendIntentView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntentImplicitView();
+            }
+        });
+        mButtonSendIntentMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntentImplicitSend();
+            }
+        });
+    }
+
+    public void startIntentExplicit(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this,Main2Activity.class);
+        intent.putExtra(KEY_INTENT_NORMAL,DATA_INTENT_NORMAL);
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_INTENT_BUNDLE,DATA_INTENT_BUNDLE);
+        bundle.putParcelable(KEY_INTENT_BUNDLE_PACERABLE,mCat);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void startIntentImplicitView(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://www.google.com.vn/"));
+        if(intent.resolveActivity(getPackageManager())!= null)
+        startActivity(intent);
+    }
+    public void startIntentImplicitSend(){
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:"));
+        intent.putExtra(Intent.EXTRA_EMAIL,"chuaboc");
+        intent.putExtra(Intent.EXTRA_SUBJECT,"namprodev");
+        if(intent.resolveActivity(getPackageManager())!= null)
+            startActivity(intent);
     }
 }
