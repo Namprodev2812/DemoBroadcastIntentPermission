@@ -2,22 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3F51B5"
+    android:background="#F5E6E6"
     android:gravity="center"
     android:orientation="vertical">
-    <Switch
-        android:id="@+id/switch_open_off_wifi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#C5CAE9"
-        android:checked="false"
-        android:text="@string/wifi_is_on_off"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
     <Button
-        android:id="@+id/button_sendbroadcast"
+        android:textSize="@dimen/sp_20"
+        android:id="@+id/button_send_intent_ex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_broadcast" />
+        android:text="@string/send_intent_Ex" />
+    <Button
+        android:textSize="@dimen/sp_18"
+        android:id="@+id/button_send_intent_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_intent_im_view" />
+    <Button
+        android:textSize="@dimen/sp_28"
+        android:id="@+id/button_send_intent_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_intent_im_mail" />
 </LinearLayout>
