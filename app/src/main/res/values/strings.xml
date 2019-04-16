@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DemoBroadcastIntentPermission</string>
+    <string name="wifi_is_on_off">Wifi is on/off</string>
+    <string name="send_broadcast">Send Broadcast</string>
 </resources>
