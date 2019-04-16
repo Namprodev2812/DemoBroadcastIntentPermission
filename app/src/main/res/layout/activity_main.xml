@@ -5,19 +5,17 @@
     android:background="#3F51B5"
     android:gravity="center"
     android:orientation="vertical">
-    <Button
-        android:id="@+id/button_sendintentex"
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/facebook"
+       android:textStyle="bold"
+       android:textSize="@dimen/sp_50"
+       android:textColor="#FFFFFF"
+       />
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_intent_Ex" />
-    <Button
-        android:id="@+id/button_sendintentview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send_intent_im_view" />
-    <Button
-        android:id="@+id/button_sendintentmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send_intent_im_mail" />
+        android:src="@drawable/thumb"
+        />
 </LinearLayout>
