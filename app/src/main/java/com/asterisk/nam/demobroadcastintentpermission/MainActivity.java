@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        initBroadcastReceiver();
+        initBroadcastReceiverLocal();
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        stopBroadcastListener();
+        stopBroadcastListenerLocal();
     }
 
     public void init() {
@@ -80,35 +81,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void initBroadcastReceiver() {
-        mBroadcastReceiver = new WifiBroadcastReceiver(mSwitchWifi);
-        mMessengerBroadcastReceiver = new MessengerBroadcastReceiver();
+    public void initBroadcastReceiverLocal(){
+        mBroadcastReceiver =  new WifiBroadcastReceiver(mSwitchWifi);
+        mMessengerBroadcastReceiver =  new MessengerBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         intentFilter.addAction(MYMESSENGER);
-        registerReceiver(mBroadcastReceiver, intentFilter);
-        registerReceiver(mMessengerBroadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessengerBroadcastReceiver,intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,intentFilter);
     }
-
-    public void stopBroadcastListener() {
-        unregisterReceiver(mBroadcastReceiver);
-        unregisterReceiver(mMessengerBroadcastReceiver);
+    public void stopBroadcastListenerLocal(){
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessengerBroadcastReceiver);
     }
-
-    public void sendBroadcast() {
+    public void sendBroadcastLocal(){
         Intent intent = new Intent();
         intent.setAction(MYMESSENGER);
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_MYMESSENGER, BODY_MYMESSENGER);
+        bundle.putString(KEY_MYMESSENGER,BODY_MYMESSENGER);
         intent.putExtras(bundle);
-        sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     public void clickButton() {
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBroadcast();
+                sendBroadcastLocal();
             }
         });
     }
