@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">DemoBroadcastIntentPermission</string>
+    <string name="send_intent_Ex">StartExplitcit</string>
+    <string name="send_intent_im_view">StartView</string>
+    <string name="send_intent_im_mail">StartMail</string>
+    <string name="cat_name">Miu</string>
+    <string name="cat_ho">EnglishCat</string>
+    <string name="hello_my_boss">Hello my boss</string>
+    <string name="facebook">facebook</string>
 </resources>
